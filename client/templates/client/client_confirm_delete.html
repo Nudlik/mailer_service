@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Удаляемая запись: "{{ object }}"</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <a type="submit" class="btn btn-lg btn-block btn-outline-warning" href="javascript:history.go(-1)">Назад</a>
+                        <input type="submit" class="btn btn-lg btn-block btn-outline-danger" value="Удалить">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

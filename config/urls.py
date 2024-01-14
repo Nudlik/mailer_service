@@ -27,6 +27,7 @@ urlpatterns = [
     path('blog/', include('blog.urls', namespace='blog'), name='blog'),
     path('mailer/', include('mailer.urls', namespace='mailer'), name='mailer'),
     path('', lambda request: redirect('mailer:home', permanent=True)),
+    path('client/', include('client.urls', namespace='client'), name='client'),
 
     path('__debug__/', include('debug_toolbar.urls')),
 ]

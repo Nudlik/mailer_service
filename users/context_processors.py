@@ -1,12 +1,12 @@
 def menu(request):
     menu_list = [
         {'title': 'Главная', 'url_name': 'mailer:home'},
-        # {'title': 'Магазин',
-        #  'submenu': [
-        #      {'title': 'Каталог', 'url_name': 'catalog:list_product'},
-        #      {'title': 'Категории', 'url_name': 'catalog:list_category'},
-        #      {'title': 'Добавить продукт', 'url_name': 'catalog:create_product'},
-        #  ]},
+        {'title': 'Рассылки',
+         'submenu': [
+             {'title': 'Клиенты', 'url_name': 'client:client_list'},
+             {'title': 'Сообщения', 'url_name': 'mailer:message_list'},
+             # {'title': 'Настройки', 'url_name': ''},
+         ]},
         {'title': 'Статьи', 'submenu': [
             {'title': 'Все посты', 'url_name': 'blog:post_list'},
             {'title': 'Добавить пост', 'url_name': 'blog:post_create'},
