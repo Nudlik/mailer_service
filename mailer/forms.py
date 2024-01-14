@@ -1,6 +1,6 @@
 from django import forms
 
-from mailer.models import MailingMessage
+from mailer.models import MailingMessage, MailingSettings
 
 
 class MessageForm(forms.ModelForm):
@@ -11,4 +11,18 @@ class MessageForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'message': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+
+class SettingsForm(forms.ModelForm):
+    class Meta:
+        model = MailingSettings
+        fields = ['time_start', 'time_end', 'frequency', 'status', 'mail', 'clients']
+        widgets = {
+            'time_start': forms.DateInput(attrs={'class': 'form-control'}),
+            'time_end': forms.DateInput(attrs={'class': 'form-control'}),
+            'frequency': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'mail': forms.Select(attrs={'class': 'form-control'}),
+            'clients': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }

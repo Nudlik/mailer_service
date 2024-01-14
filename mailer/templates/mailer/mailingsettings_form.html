@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row-form-errors">{{ form.non_field_errors }}</div>
+
+                        {% for field in form %}
+                            <p><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                            </p>
+                            <div class="form-error text-danger">
+                                <p>{{ field.errors }}</p>
+                            </div>
+                        {% endfor %}
+
+                        <a type="submit" class="btn btn-lg btn-block btn-outline-warning" href="javascript:history.go(-1)">Назад</a>
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-warning" name="button_buy"
+                                value="{{ product.pk }}">Сохранить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

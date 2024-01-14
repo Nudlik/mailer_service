@@ -3,6 +3,11 @@ from django.db import models
 
 from client.models import Client
 
+NULLABLE = {
+    'blank': True,
+    'null': True,
+}
+
 
 class MailingSettings(models.Model):
 
@@ -17,8 +22,8 @@ class MailingSettings(models.Model):
         ACTIVE = 'active', 'активна'
         INACTIVE = 'inactive', 'неактивна'
 
-    time_start = models.TimeField(verbose_name='Время начала')
-    time_end = models.TimeField(verbose_name='Время конца')
+    time_start = models.DateField(verbose_name='Время начала')
+    time_end = models.DateField(verbose_name='Время конца')
     frequency = models.CharField(choices=FREQUENCY.choices, max_length=7, verbose_name='Периодичность')
     status = models.CharField(choices=STATUS.choices, max_length=8, verbose_name='Статус')
     mail = models.ForeignKey(
@@ -30,6 +35,7 @@ class MailingSettings(models.Model):
     owner = models.ForeignKey(
         to=get_user_model(),
         on_delete=models.CASCADE,
+        **NULLABLE,
         related_name='setting',
         verbose_name='Владелец',
     )
@@ -40,7 +46,7 @@ class MailingSettings(models.Model):
         verbose_name_plural = 'Рассылки'
 
     def __str__(self):
-        return f'{self.time_start}-{self.time_end}: {self.mail.title}'
+        return f'{self.time_start} - {self.time_end}: {self.mail.title}'
 
 
 class MailingMessage(models.Model):
@@ -61,9 +67,9 @@ class MailingLogger(models.Model):
         SUCCESS = 'success', 'успешно'
         ERROR = 'error', 'ошибка'
 
-    date = models.TimeField(auto_now_add=True, verbose_name='Время попытки')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Время попытки')
     status = models.CharField(max_length=7, choices=STATUS.choices, verbose_name='Статус попытки')
-    error = models.TextField(verbose_name='Ответ почтового сервера')
+    error = models.CharField(max_length=255, verbose_name='Ответ почтового сервера')
 
     class Meta:
         verbose_name = 'Лог'

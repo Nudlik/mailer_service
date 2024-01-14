@@ -5,7 +5,7 @@ def menu(request):
          'submenu': [
              {'title': 'Клиенты', 'url_name': 'client:client_list'},
              {'title': 'Сообщения', 'url_name': 'mailer:message_list'},
-             # {'title': 'Настройки', 'url_name': ''},
+             {'title': 'Настройки', 'url_name': 'mailer:settings_list'},
          ]},
         {'title': 'Статьи', 'submenu': [
             {'title': 'Все посты', 'url_name': 'blog:post_list'},
