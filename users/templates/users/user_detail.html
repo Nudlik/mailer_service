@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header bg-dark-subtle">{{ title }}</div>
+                <div class="card-body">
+
+                    {% if user.avatar and user.avatar.path|file_exists %}
+                        <img src="{{ user.avatar.url }}" class="img-thumbnail rounded mx-auto d-block">
+                    {% else %}
+                        <svg class="img-thumbnail rounded mx-auto d-block" width="50%" height="180"
+                             xmlns="http://www.w3.org/2000/svg" role="img"
+                             aria-label="Placeholder: Заглушка изображения"
+                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#868e96"></rect>
+                            <text x="22%" y="50%" fill="#dee2e6" dy=".3em">Заглушка изображения</text>
+                        </svg>
+                    {% endif %}
+                    <br><br>
+                    <ul>
+                        {% for k, v in profile.items %}
+                            <li>
+                                {{ k }}: {{ v|default:'Не указано' }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+                <div class="card-footer">
+                    <a type="submit" class="btn btn-lg btn-block btn-outline-warning"
+                       href="{% url 'user:profile_update' %}">
+                        Редактировать
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

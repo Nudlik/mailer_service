@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row row-cols-1 row-cols-md-1 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">{{ post.title }}</h3>
+                    <small class="text-body-secondary">Обновлено: {{ post.time_update|date:'d-m-Y H:i:s' }}</small><br>
+                    <small class="text-body-secondary">Кол-во просмотров: {{ post.view_count }}</small><br>
+                    <small class="text-body-secondary">Автор: {{ post.author }}</small><br>
+                    <div class="card-body">
+                        {{ post.content|linebreaks }}
+                    </div>
+                    <a type="submit" class="btn btn-lg btn-block btn-outline-warning" href="javascript:history.go(-1)">Назад</a>
+
+                    {% if perms.blog.change_post or post.author == user %}
+                    <a type="submit" class="btn btn-lg btn-block btn-outline-warning" href="{% url 'blog:post_update' post.slug %}">Редактировать</a>
+                    {% endif %}
+                    {% if perms.blog.delete_post or post.author == user %}
+                    <a type="submit" class="btn btn-lg btn-block btn-outline-danger" href="{% url 'blog:post_delete' post.slug %}">Удалить</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header bg-dark-subtle">{{ title }}</div>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}"/>
+                        <div class="form-error text-danger">{{ form.non_field_errors }}</div>
+
+                        {% for field in form %}
+                            <p><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                            </p>
+                            <div class="form-error text-danger">
+                                <p>{{ field.errors }}</p>
+                            </div>
+                        {% endfor %}
+
+                        <p>
+                            <button type="submit" class="btn btn-lg btn-block btn-outline-warning">
+                                {{ button }}
+                            </button>
+
+                    </form>
+                    {% if user.is_authenticated %}
+                        <a type="submit" class="btn btn-lg btn-block btn-outline-warning"
+                           href="{% url 'user:password_change' %}">Сменить пароль</a>
+                    {% endif %}
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
