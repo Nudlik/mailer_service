@@ -10,22 +10,25 @@
         {% for massage in object_list %}
             <div class="col">
                 <div class="card h-100">
-                    <div class="card-header">{{ massage.title }}</div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            {{ massage.message|truncatewords:100 }}
-                        </p>
+                    <div class="card-header">
+                        <h5 class="card-title">Тема письма: {{ massage.title }}</h5>
                     </div>
-                    <div class="mt-auto mb-3 mx-3">
-                        <a href="{% url 'mailer:message_detail' massage.pk %}" class="btn btn-lg btn-block btn-outline-warning">
-                            Смотреть
-                        </a>
-                        <a href="{% url 'mailer:message_update' massage.pk %}" class="btn btn-lg btn-block btn-outline-warning">
-                            Изменить
-                        </a>
-                        <a href="{% url 'mailer:message_delete' massage.pk %}" class="btn btn-lg btn-block btn-outline-danger">
-                            Удалить
-                        </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Содержимое письма:</h5>
+                        <p class="card-text">{{ massage.message|truncatechars:50 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a href="{% url 'mailer:message_detail' massage.pk %}" class="btn btn-lg btn-block btn-outline-warning">
+                                Смотреть
+                            </a>
+                            <a href="{% url 'mailer:message_update' massage.pk %}" class="btn btn-lg btn-block btn-outline-warning">
+                                Изменить
+                            </a>
+                            <a href="{% url 'mailer:message_delete' massage.pk %}" class="btn btn-lg btn-block btn-outline-danger">
+                                Удалить
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

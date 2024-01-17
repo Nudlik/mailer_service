@@ -13,19 +13,24 @@
                     <div class="card-header">{{ object }}</div>
                     <div class="card-body">
                         <p class="card-text">
+
                             {{ object.status }}
+                            {{ object.mail }}
+                            {{ object.mail.message }}
                         </p>
                     </div>
-                    <div class="mt-auto mb-3 mx-3">
-                        <a href="{% url 'mailer:settings_detail' object.pk %}" class="btn btn-lg btn-block btn-outline-warning">
-                            Смотреть
-                        </a>
-                        <a href="{% url 'mailer:settings_update' object.pk %}" class="btn btn-lg btn-block btn-outline-warning">
-                            Изменить
-                        </a>
-                        <a href="{% url 'mailer:settings_delete' object.pk %}" class="btn btn-lg btn-block btn-outline-danger">
-                            Удалить
-                        </a>
+                    <div class="card-footer">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a href="{% url 'mailer:settings_detail' object.pk %}" class="btn btn-lg btn-block btn-outline-warning">
+                                Смотреть
+                            </a>
+                            <a href="{% url 'mailer:settings_update' object.pk %}" class="btn btn-lg btn-block btn-outline-warning">
+                                Изменить
+                            </a>
+                            <a href="{% url 'mailer:settings_delete' object.pk %}" class="btn btn-lg btn-block btn-outline-danger">
+                                Удалить
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

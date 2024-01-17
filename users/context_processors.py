@@ -4,8 +4,11 @@ def menu(request):
         {'title': 'Рассылки',
          'submenu': [
              {'title': 'Клиенты', 'url_name': 'client:client_list'},
+             {'title': 'Добавить клиента', 'url_name': 'client:client_create'},
              {'title': 'Сообщения', 'url_name': 'mailer:message_list'},
-             {'title': 'Настройки', 'url_name': 'mailer:settings_list'},
+             {'title': 'Добавить сообщение', 'url_name': 'mailer:message_create'},
+             {'title': 'Рассылки', 'url_name': 'mailer:settings_list'},
+             {'title': 'Добавить рассылку', 'url_name': 'mailer:settings_create'},
          ]},
         {'title': 'Статьи', 'submenu': [
             {'title': 'Все посты', 'url_name': 'blog:post_list'},

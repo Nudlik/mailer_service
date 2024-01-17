@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 
 from client.models import Client
 
@@ -48,9 +49,12 @@ class MailingSettings(models.Model):
     def __str__(self):
         return f'{self.time_start} - {self.time_end}: {self.mail.title}'
 
+    def get_absolute_url(self):
+        return reverse('mailer:settings_detail', kwargs={'pk': self.pk})
+
 
 class MailingMessage(models.Model):
-    title = models.CharField(max_length=150, verbose_name='Заголовок')
+    title = models.CharField(max_length=150, verbose_name='Тема письма')
     message = models.TextField(verbose_name='Сообщение')
 
     class Meta:
@@ -59,6 +63,9 @@ class MailingMessage(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('mailer:message_detail', kwargs={'pk': self.pk})
 
 
 class MailingLogger(models.Model):
