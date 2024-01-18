@@ -23,6 +23,7 @@ class MailingSettings(models.Model):
         ACTIVE = 'active', 'активна'
         INACTIVE = 'inactive', 'неактивна'
 
+    title = models.CharField(max_length=100, verbose_name='Название рассылки')
     time_start = models.DateField(verbose_name='Время начала')
     time_end = models.DateField(verbose_name='Время конца')
     frequency = models.CharField(choices=FREQUENCY.choices, max_length=7, verbose_name='Периодичность')
@@ -47,10 +48,18 @@ class MailingSettings(models.Model):
         verbose_name_plural = 'Рассылки'
 
     def __str__(self):
-        return f'{self.time_start} - {self.time_end}: {self.mail.title}'
+        return self.title
 
     def get_absolute_url(self):
         return reverse('mailer:settings_detail', kwargs={'pk': self.pk})
+
+    @property
+    def get_status(self):
+        return dict(self.STATUS.choices).get(self.status)
+
+    @property
+    def get_frequency(self):
+        return dict(self.FREQUENCY.choices).get(self.frequency)
 
 
 class MailingMessage(models.Model):

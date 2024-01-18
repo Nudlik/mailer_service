@@ -69,13 +69,22 @@ class MessageDeleteView(MenuMixin, DeleteView):
 
 # --------------------------------- MailingSettings -------------------------------------------
 
-class SettingsListView(ListView):
+class SettingsListView(MenuMixin, ListView):
     model = MailingSettings
     paginate_by = 3
+    page_title = 'Список всех рассылок'
+    page_description = 'Здесь отображены все рассылки созданные вами'
 
 
-class SettingsDetailView(DetailView):
+class SettingsDetailView(MenuMixin, DetailView):
     model = MailingSettings
+    page_description = 'Здесь можно просмотреть содержимое рассылки'
+
+    def get_context_data(self, **kwargs):
+        return self.get_mixin_context(
+            context=super().get_context_data(**kwargs),
+            title=f'Страница просмотра рассылки "{self.object.title}"',
+        )
 
 
 class SettingsCreateView(CreateView):

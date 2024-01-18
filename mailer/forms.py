@@ -17,8 +17,9 @@ class MessageForm(forms.ModelForm):
 class SettingsForm(forms.ModelForm):
     class Meta:
         model = MailingSettings
-        fields = ['time_start', 'time_end', 'frequency', 'status', 'mail', 'clients']
+        fields = ['title', 'time_start', 'time_end', 'frequency', 'status', 'mail', 'clients']
         widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
             'time_start': forms.DateInput(attrs={'class': 'form-control'}),
             'time_end': forms.DateInput(attrs={'class': 'form-control'}),
             'frequency': forms.Select(attrs={'class': 'form-control'}),

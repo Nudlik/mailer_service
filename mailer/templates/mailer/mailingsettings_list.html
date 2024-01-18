@@ -10,14 +10,20 @@
         {% for object in object_list %}
             <div class="col">
                 <div class="card h-100">
-                    <div class="card-header">{{ object }}</div>
+                    <div class="card-header">Рассылка: <b>{{ object }}</b></div>
                     <div class="card-body">
-                        <p class="card-text">
-
-                            {{ object.status }}
-                            {{ object.mail }}
-                            {{ object.mail.message }}
-                        </p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                Время: с <b>{{ object.time_start|date:'d.m.Y' }}</b> по <b>{{ object.time_end|date:'d.m.Y' }}</b>
+                            </li>
+                            <li class="list-group-item">Периодичность: <b>{{ object.get_frequency }}</b></li>
+                            <li class="list-group-item">Статус: <b>{{ object.get_status }}</b></li>
+                            <li class="list-group-item">Кол-во получателей: <b>{{ object.clients.count }}</b></li>
+                            <li class="list-group-item">
+                                <p>Тема письма: <b>{{ object.mail.title }}</b></p>
+                                <p>Содержимое письма: <b>{{ object.mail.message|truncatechars:50 }}</b></p>
+                            </li>
+                        </ul>
                     </div>
                     <div class="card-footer">
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">

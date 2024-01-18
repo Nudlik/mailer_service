@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 
 NULLABLE = {
     'blank': True,
@@ -8,9 +9,9 @@ NULLABLE = {
 
 
 class Client(models.Model):
-    email = models.EmailField(max_length=100)
-    fullname = models.CharField(max_length=100)
-    comment = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100, verbose_name='Почтовый ящик')
+    fullname = models.CharField(max_length=100, verbose_name='ФИО')
+    comment = models.CharField(max_length=100, **NULLABLE, verbose_name='Заметка')
     owner = models.ForeignKey(
         to=get_user_model(),
         **NULLABLE,
@@ -25,3 +26,6 @@ class Client(models.Model):
 
     def __str__(self):
         return self.email
+
+    def get_absolute_url(self):
+        return reverse('client:client_detail', kwargs={'pk': self.pk})
