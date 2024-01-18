@@ -6,18 +6,51 @@
         <a href="{% url 'mailer:settings_list' %}" class="btn btn-lg btn-block btn-outline-warning">Все рассылки</a>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-1 g-4">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col">
             <div class="card h-100">
+                <div class="card-header">
+                    Рассылка: <b>{{ object }}</b>
+                </div>
                 <div class="card-body">
-                    <h3 class="card-title">{{ object }}</h3>
-                    <div class="card-body">
-                        {{ object.time_start }}
-                    </div>
-                    <a type="submit" class="btn btn-lg btn-block btn-outline-warning" href="javascript:history.go(-1)">Назад</a>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            Время: с <b>{{ object.time_start|date:'d.m.Y' }}</b>
+                            по <b>{{ object.time_end|date:'d.m.Y' }}</b>
+                        </li>
+                        <li class="list-group-item">Периодичность: <b>{{ object.get_frequency }}</b></li>
+                        <li class="list-group-item">Статус: <b>{{ object.get_status }}</b></li>
+                        <li class="list-group-item">Кол-во получателей: <b>{{ object.clients.count }}</b></li>
+                        <li class="list-group-item">Список получателей:
+                            <ul>
+                                {% for client in object.clients.all %}
+                                    <li>{{ client.email }} - {{ client.fullname }}</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
+
+        <div class="col-1">
+            <div class="card h-100">
+                <div class="card-header">
+                    <b>Тема письма: </b>{{ object.mail.title }}
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <p><b>Содержимое письма:</b></p>
+                        <p>{{ object.mail.message }}</p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-auto mb-3 mx-3 py-3">
+        <a type="submit" class="btn btn-lg btn-block btn-outline-warning" href="javascript:history.go(-1)">Назад</a>
     </div>
 
 {% endblock %}

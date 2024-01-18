@@ -87,9 +87,11 @@ class SettingsDetailView(MenuMixin, DetailView):
         )
 
 
-class SettingsCreateView(CreateView):
+class SettingsCreateView(MenuMixin, CreateView):
     model = MailingSettings
     form_class = SettingsForm
+    page_title = 'Страница создания рассылки'
+    page_description = 'Здесь можно создать настройки рассылки'
 
     def get_success_url(self):
         return reverse_lazy('mailer:settings_detail', kwargs={'pk': self.object.pk})
@@ -99,14 +101,18 @@ class SettingsCreateView(CreateView):
         return super().form_valid(form)
 
 
-class SettingsUpdateView(UpdateView):
+class SettingsUpdateView(MenuMixin, UpdateView):
     model = MailingSettings
     form_class = SettingsForm
     template_name = 'mailer/mailingsettings_form.html'
+    page_title = 'Страница редактирования рассылки'
+    page_description = 'Здесь можно изменить настройки рассылки'
 
 
-class SettingsDeleteView(DeleteView):
+class SettingsDeleteView(MenuMixin, DeleteView):
     model = MailingSettings
     success_url = reverse_lazy('mailer:settings_list')
+    page_title = 'Страница удаления рассылки'
+    page_description = 'Здесь можно удалить рассылку'
 
 
