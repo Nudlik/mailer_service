@@ -27,3 +27,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    class Meta(AbstractUser.Meta):
+        permissions = [
+            ('can_view_all_fields', 'Может просматривать всю админку')
+        ]

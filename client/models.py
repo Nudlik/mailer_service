@@ -23,6 +23,9 @@ class Client(models.Model):
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
+        permissions = [
+            ('view_client_list', 'Может просматривать список клиентов')
+        ]
 
     def __str__(self):
         return self.email

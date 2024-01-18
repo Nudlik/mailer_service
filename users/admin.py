@@ -24,9 +24,6 @@ class UserAdmin(admin.ModelAdmin):
                     'first_name',
                     'last_name',
                     'email',
-                    'avatar',
-                    'phone',
-                    'country',
                 )
             }
         ),
@@ -52,3 +49,21 @@ class UserAdmin(admin.ModelAdmin):
             }
         ),
     )
+
+    def get_readonly_fields(self, request, obj=None):
+        """ Оставляю персоналу все поля для чтения кроме is_active что бы он мог блокировать пользователей """
+
+        if not request.user.has_perm('can_view_all_fields'):
+            readonly_fields = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser',
+                               'groups', 'user_permissions', 'last_login', 'date_joined', 'is_staff', 'is_superuser')
+            return readonly_fields
+        return []
+
+    def get_queryset(self, request):
+        """ Для персонала исключил всех кроме пользователей, что бы они не могли банить друг друга """
+
+        queryset = super().get_queryset(request)
+        if not request.user.is_superuser:
+            queryset = queryset.filter(is_superuser=False, is_staff=False)
+        return queryset
+
