@@ -28,6 +28,8 @@ class MailingSettings(models.Model):
     time_end = models.DateField(verbose_name='Время конца')
     frequency = models.CharField(choices=FREQUENCY.choices, max_length=7, verbose_name='Периодичность')
     status = models.CharField(choices=STATUS.choices, max_length=8, verbose_name='Статус')
+    is_active = models.BooleanField(default=True, verbose_name='Активна')
+
     mail = models.ForeignKey(
         to='MailingMessage',
         on_delete=models.CASCADE,
@@ -46,6 +48,9 @@ class MailingSettings(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+        permissions = [
+            ('can_view_all_fields', 'Может просматривать всю админку'),
+        ]
 
     def __str__(self):
         return self.title

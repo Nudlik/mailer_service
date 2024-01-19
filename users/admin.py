@@ -54,7 +54,7 @@ class UserAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         """ Оставляю персоналу все поля для чтения кроме is_active что бы он мог блокировать пользователей """
 
-        if not request.user.has_perm('can_view_all_fields'):
+        if not request.user.has_perm('users.can_view_all_fields'):
             active_fields = {
                 'is_active',
             }
