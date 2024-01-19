@@ -30,5 +30,6 @@ class User(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         permissions = [
-            ('can_view_all_fields', 'Может просматривать всю админку')
+            ('can_view_all_fields', 'Может просматривать всю админку'),
+            ('can_view_is_staff', 'Может просматривать персонал'),
         ]

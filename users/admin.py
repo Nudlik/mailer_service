@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from users.models import User
@@ -54,8 +55,10 @@ class UserAdmin(admin.ModelAdmin):
         """ Оставляю персоналу все поля для чтения кроме is_active что бы он мог блокировать пользователей """
 
         if not request.user.has_perm('can_view_all_fields'):
-            readonly_fields = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser',
-                               'groups', 'user_permissions', 'last_login', 'date_joined', 'is_staff', 'is_superuser')
+            active_fields = {
+                'is_active',
+            }
+            readonly_fields = [field.name for field in self.model._meta.get_fields() if field.name not in active_fields]
             return readonly_fields
         return []
 
@@ -67,3 +70,13 @@ class UserAdmin(admin.ModelAdmin):
             queryset = queryset.filter(is_superuser=False, is_staff=False)
         return queryset
 
+    def get_object(self, request, object_id, from_field=None):
+        """ Для персонала отключил возможность просматривать персонал прыгая по урлам в админке """
+
+        obj = super().get_object(request, object_id, from_field)
+        if not request.user.has_perm('can_view_is_staff'):
+            if obj is None:
+                raise Http404('Пользователь не существует')
+            elif obj.is_staff or obj.is_superuser:
+                raise Http404('Недостаточно прав для просмотра этого пользователя')
+        return obj
