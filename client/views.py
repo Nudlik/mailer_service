@@ -43,7 +43,7 @@ class ClientDetailView(LoginRequiredMixin, MenuMixin, DetailView):
         return queryset
 
 
-class ClientCreateView(MenuMixin, CreateView):
+class ClientCreateView(LoginRequiredMixin, MenuMixin, CreateView):
     model = Client
     form_class = ClientForm
     page_title = 'Страница создания клиента'
@@ -57,7 +57,7 @@ class ClientCreateView(MenuMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdateView(MenuMixin, UpdateView):
+class ClientUpdateView(LoginRequiredMixin, MenuMixin, UpdateView):
     model = Client
     form_class = ClientForm
     template_name = 'client/client_form.html'
@@ -65,7 +65,7 @@ class ClientUpdateView(MenuMixin, UpdateView):
     page_description = 'Здесь можно редактировать информацию о клиенте'
 
 
-class ClientDeleteView(MenuMixin, DeleteView):
+class ClientDeleteView(LoginRequiredMixin, MenuMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('client:client_list')
     page_title = 'Страница удаления клиента'

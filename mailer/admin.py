@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from mailer.models import MailingSettings, MailingMessage, MailingLogger
 
@@ -26,13 +29,24 @@ class MailingSettingsAdmin(admin.ModelAdmin):
                 'is_active',
             }
             readonly_fields = [field.name for field in self.model._meta.get_fields() if field.name not in active_fields]
+            self.fields = ['title', 'time_start', 'time_end', 'frequency', 'status', 'is_active', 'mail', 'owner']
             return readonly_fields
         return []
 
 
 @admin.register(MailingMessage)
 class MailingMessageAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        'title',
+        'author',
+        'get_author',
+    ]
+
+    @admin.display(description='ссыль')
+    def get_author(self, obj):
+        # url = reverse('admin:auth_user_change', args=[obj.author.id])
+        url = f'http://127.0.0.1:8000/admin/users/user/{obj.author.id}/change/'  # костыль потом поправлю
+        return mark_safe(f'<a href="{url}">{obj.author}</a>')
 
 
 @admin.register(MailingLogger)

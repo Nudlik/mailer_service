@@ -70,6 +70,13 @@ class MailingSettings(models.Model):
 class MailingMessage(models.Model):
     title = models.CharField(max_length=150, verbose_name='Тема письма')
     message = models.TextField(verbose_name='Сообщение')
+    author = models.ForeignKey(
+        to=get_user_model(),
+        **NULLABLE,
+        on_delete=models.CASCADE,
+        related_name='message',
+        verbose_name='Автор'
+    )
 
     class Meta:
         verbose_name = 'Письмо'

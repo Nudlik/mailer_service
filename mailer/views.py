@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView, ListView
 
@@ -17,14 +19,18 @@ class SendView(TemplateView):
 
 
 # --------------------------------- MailingMessage ---------------------------------------------
-class MessageListView(MenuMixin, ListView):
+class MessageListView(LoginRequiredMixin, MenuMixin, ListView):
     model = MailingMessage
     paginate_by = 3
     page_title = 'Список всех писем'
     page_description = 'Здесь отображены все письма созданные вами'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(author=self.request.user)
 
-class MessageDetailView(MenuMixin, DetailView):
+
+class MessageDetailView(LoginRequiredMixin, MenuMixin, DetailView):
     model = MailingMessage
     page_description = 'Здесь можно просмотреть содержимое письма'
 
@@ -34,8 +40,12 @@ class MessageDetailView(MenuMixin, DetailView):
             title=f'Страница просмотра письма "{self.object.title}"',
         )
 
+    def get_object(self, queryset=None):
+        qs = get_object_or_404(self.model, pk=self.kwargs['pk'], author=self.request.user)
+        return qs
 
-class MessageCreateView(MenuMixin, CreateView):
+
+class MessageCreateView(LoginRequiredMixin, MenuMixin, CreateView):
     model = MailingMessage
     form_class = MessageForm
     page_title = 'Страница создания письма'
@@ -44,12 +54,12 @@ class MessageCreateView(MenuMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('mailer:message_detail', kwargs={'pk': self.object.pk})
 
-    # def form_valid(self, form):
-    #     form.instance.owner = self.request.user
-    #     return super().form_valid(form)
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
-class MessageUpdateView(MenuMixin, UpdateView):
+class MessageUpdateView(LoginRequiredMixin, MenuMixin, UpdateView):
     model = MailingMessage
     form_class = MessageForm
     template_name = 'mailer/mailingmessage_form.html'
@@ -57,7 +67,7 @@ class MessageUpdateView(MenuMixin, UpdateView):
     page_description = 'Здесь можно редактировать письмо'
 
 
-class MessageDeleteView(MenuMixin, DeleteView):
+class MessageDeleteView(LoginRequiredMixin, MenuMixin, DeleteView):
     model = MailingMessage
     success_url = reverse_lazy('mailer:message_list')
     page_title = 'Страница удаления письма'
