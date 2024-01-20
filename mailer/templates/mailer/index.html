@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    <p>Количество рассылок всего: {{ mailing.total_count }}</p>
+    <p>Количество активных рассылок: {{ mailing.total_active }}</p>
+    <p>Количество уникальных клиентов для рассылок: {{ mailing.total_client }}</p>
+    <p>Три случайные статьи из блога: {{ random_post }}</p>
+
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col">
             <div class="card h-100">

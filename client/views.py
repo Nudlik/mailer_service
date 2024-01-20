@@ -16,11 +16,12 @@ class ClientListView(LoginRequiredMixin, MenuMixin, ListView):
     page_description = 'Здесь отображены все клиенты добавленные вами'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.request.user.is_staff or self.request.user.is_superuser \
-                or self.request.user.has_perm('client.view_client_list'):
-            return queryset
-        return queryset.filter(owner=self.request.user)
+        # queryset = super().get_queryset()
+        # if self.request.user.is_staff or self.request.user.is_superuser \
+        #         or self.request.user.has_perm('client.view_client_list'):
+        #     return queryset
+        # return queryset.filter(owner=self.request.user)
+        return self.model.objects.filter(owner=self.request.user)
 
 
 class ClientDetailView(LoginRequiredMixin, MenuMixin, DetailView):
@@ -34,13 +35,14 @@ class ClientDetailView(LoginRequiredMixin, MenuMixin, DetailView):
         )
 
     def get_object(self, queryset=None):
-        queryset = get_object_or_404(self.model, pk=self.kwargs['pk'])
-        if self.request.user.is_staff or self.request.user.is_superuser \
-                or self.request.user.has_perm('client.view_client'):
-            return queryset
-        elif queryset.owner != self.request.user:
-            raise Http404
-        return queryset
+        # queryset = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        # if self.request.user.is_staff or self.request.user.is_superuser \
+        #         or self.request.user.has_perm('client.view_client'):
+        #     return queryset
+        # elif queryset.owner != self.request.user:
+        #     raise Http404
+        # return queryset
+        return get_object_or_404(self.model, pk=self.kwargs['pk'], owner=self.request.user)
 
 
 class ClientCreateView(LoginRequiredMixin, MenuMixin, CreateView):

@@ -1,5 +1,6 @@
 from django import forms
 
+from client.models import Client
 from mailer.models import MailingMessage, MailingSettings
 
 
@@ -15,6 +16,13 @@ class MessageForm(forms.ModelForm):
 
 
 class SettingsForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['clients'].queryset = Client.objects.filter(owner=user)
+        self.fields['mail'].queryset = MailingMessage.objects.filter(author=user)
+
     class Meta:
         model = MailingSettings
         fields = ['title', 'time_start', 'time_end', 'frequency', 'status', 'mail', 'clients']

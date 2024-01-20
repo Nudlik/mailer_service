@@ -38,14 +38,12 @@ class MailingSettingsAdmin(admin.ModelAdmin):
 class MailingMessageAdmin(admin.ModelAdmin):
     list_display = [
         'title',
-        'author',
         'get_author',
     ]
 
-    @admin.display(description='ссыль')
+    @admin.display(description='Автор')
     def get_author(self, obj):
-        # url = reverse('admin:auth_user_change', args=[obj.author.id])
-        url = f'http://127.0.0.1:8000/admin/users/user/{obj.author.id}/change/'  # костыль потом поправлю
+        url = reverse('admin:users_user_change', args=[obj.author.id])
         return mark_safe(f'<a href="{url}">{obj.author}</a>')
 
 
