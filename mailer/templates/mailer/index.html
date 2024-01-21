@@ -2,27 +2,78 @@
 
 {% block content %}
 
-    <p>Количество рассылок всего: {{ mailing.total_count }}</p>
-    <p>Количество активных рассылок: {{ mailing.total_active }}</p>
-    <p>Количество уникальных клиентов для рассылок: {{ mailing.total_client }}</p>
-    <p>Три случайные статьи из блога: {{ random_post }}</p>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row row-cols-1 g-3">
+                <div class="col">
+                    <div class="card mx-2 p-0">
+                        <div class="card-header">
+                            <b>Статистика рассылок сайта</b>
+                        </div>
+                        <div class="card-body">
+                            <p>Количество рассылок всего: {{ mailing.total_count }}</p>
+                            <p>Количество активных рассылок: {{ mailing.total_active }}</p>
+                            <p>Количество уникальных клиентов для рассылок: {{ mailing.total_client }}</p>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body">
-                    <a type="button" class="btn btn-lg btn-block btn-outline-warning container" href="{% url 'mailer:send' %}">Перейти в рассылки</a>
+                <div class="col">
+                    <div class="card h-100 mx-2 p-0">
+                        <div class="card-body">
+                            <a type="button" class="btn btn-lg btn-block btn-outline-warning container" href="{% url 'mailer:send' %}">
+                                Перейти в рассылки
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body">
-                    <a type="button" class="btn btn-lg btn-block btn-outline-warning container" href="{% url 'blog:post_list' %}">Читать статьи</a>
+        <div class="col-md-6">
+            <div class="row row-cols-1 g-3">
+                {% for post in random_post %}
+                    <div class="col">
+                        <div class="card mx-2 p-0">
+                            <div class="card-header">
+                                <b>{{ post.title }}</b>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    {{ post.content|truncatewords:50 }}
+                                </p>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <small class="text-body-secondary">Обновлено: {{ post.time_update|date:'d-m-Y H:i:s' }}</small><br>
+                                        <small class="text-body-secondary">Кол-во просмотров: {{ post.view_count }}</small><br>
+                                        <small class="text-body-secondary">Автор: {{ post.author|get_name_or_email }}</small><br>
+                                        <div class="mt-auto mb-3 mx-3">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <a href="{{ post.get_absolute_url }}"
+                                           class="btn btn-lg btn-block btn-outline-warning">Читать</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="col">
+                    <div class="card h-100 mx-2 p-0">
+                        <div class="card-body">
+                            <a type="button" class="btn btn-lg btn-block btn-outline-warning container" href="{% url 'blog:post_list' %}">
+                                Читать статьи
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
+
 {% endblock %}

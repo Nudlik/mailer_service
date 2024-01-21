@@ -1,39 +1,49 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
     <div class="mt-auto mb-3 mx-3">
         <a href="{% url 'client:client_create' %}" class="btn btn-lg btn-block btn-outline-warning">
             Создать
         </a>
     </div>
-    <div class="row row-cols-1 row-cols-md-1 g-3">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Почта</th>
+            <th scope="col">Заметка</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
         {% for client in object_list %}
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">Клиент: {{ client.fullname }} Почта: {{ client.email }}</h5>
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ client.fullname }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.comment|truncatechars:30 }}</td>
+
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <a href="{% url 'client:client_detail' client.pk %}" class="btn btn-outline-warning">
+                            Смотреть
+                        </a>
+                        <a href="{% url 'client:client_update' client.pk %}" class="btn btn-outline-warning">
+                            Изменить
+                        </a>
+                        <a href="{% url 'client:client_delete' client.pk %}" class="btn btn-outline-danger">
+                            Удалить
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Заметка:</h5>
-                        <p class="card-text">{{ client.comment|truncatechars:50 }}</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="{% url 'client:client_detail' client.pk %}" class="btn btn-lg btn-block btn-outline-warning">
-                                Смотреть
-                            </a>
-                            <a href="{% url 'client:client_update' client.pk %}" class="btn btn-lg btn-block btn-outline-warning">
-                                Изменить
-                            </a>
-                            <a href="{% url 'client:client_delete' client.pk %}" class="btn btn-lg btn-block btn-outline-danger">
-                                Удалить
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </td>
+
+            </tr>
         {% endfor %}
-    </div>
+        </tbody>
+    </table>
 
     {% btn_nav paginator page_obj %}
 
