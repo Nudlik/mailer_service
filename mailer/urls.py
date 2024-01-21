@@ -6,7 +6,6 @@ app_name = apps.MailerConfig.name
 
 urlpatterns = [
     path('', views.IndexTemplateView.as_view(), name='home'),
-    path('send/', views.SendView.as_view(), name='send'),
 
     path('message/list', views.MessageListView.as_view(), name='message_list'),
     path('message/create', views.MessageCreateView.as_view(), name='message_create'),

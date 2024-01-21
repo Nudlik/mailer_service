@@ -6,7 +6,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView, DeleteVie
 
 from blog.models import Post
 from mailer.forms import MessageForm, SettingsForm
-from mailer.models import MailingMessage, MailingLogger, MailingSettings
+from mailer.models import MailingMessage, MailingSettings
 from mailer.utils import MenuMixin
 
 
@@ -25,10 +25,6 @@ class IndexTemplateView(MenuMixin, TemplateView):
             ),
             random_post=Post.objects.order_by('?')[:3],
         )
-
-
-class SendView(TemplateView):
-    template_name = 'mailer/send.html'
 
 
 # --------------------------------- MailingMessage ---------------------------------------------
@@ -85,11 +81,7 @@ class MessageDeleteView(LoginRequiredMixin, MenuMixin, DeleteView):
     page_description = 'Здесь можно удалить письмо'
 
 
-# --------------------------------- MailingLogger ---------------------------------------------
-
-
 # --------------------------------- MailingSettings -------------------------------------------
-
 class SettingsListView(LoginRequiredMixin, MenuMixin, ListView):
     model = MailingSettings
     paginate_by = 3
