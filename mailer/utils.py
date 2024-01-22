@@ -1,6 +1,11 @@
-from datetime import timedelta
+from datetime import timedelta, date
+import smtplib
 
+from dateutil.relativedelta import relativedelta
 from django.core.mail import send_mail
+
+from config import settings
+from mailer.models import MailingSettings, MailingLogger
 
 
 class MenuMixin:
@@ -23,47 +28,53 @@ class MenuMixin:
         return context
 
 
-def check_day_dispatch(now_date, start_date, end_date, frequency):
-    flag = False
+def check_day_dispatch(now_date: date, start_date: date, end_date: date, frequency: str) -> bool:
+    """ Проверка даты отправки рассылки """
 
     if now_date < start_date or now_date > end_date:
-        return flag
+        return False
+    elif frequency == 'daily':
+        return True
 
-    current_date = start_date
-
-    if frequency == 'daily':
-        while current_date <= end_date:
-            if current_date == now_date:
-                flag = True
-                break
-            current_date += timedelta(days=1)
-    elif frequency == 'weekly':
-        while current_date <= end_date:
-            if current_date == now_date:
-                flag = True
-                break
-            current_date += timedelta(weeks=1)
-    elif frequency == 'monthly':
-        while current_date <= end_date:
-            if current_date == now_date:
-                flag = True
-                break
-
-            if current_date.month == 12:
-                current_date = current_date.replace(year=current_date.year + 1, month=1, day=1)
-            else:
-                current_date = current_date.replace(month=current_date.month + 1, day=1)
+    current_date, flag = start_date, False
+    delta_dict = {
+        'weekly': timedelta(weeks=1),
+        'monthly': relativedelta(months=+1)
+    }
+    frequency = delta_dict[frequency]
+    while current_date <= end_date:
+        if current_date == now_date:
+            flag = True
+            break
+        current_date += frequency
 
     return flag
 
 
-def send_mail_custom(subject, message, from_email, recipient_list):
+def send_mail_custom(mail_setting: MailingSettings, client: MailingSettings.clients) -> None:
+    """ Отправка письма каждому клиенту(что получатель не видел список отправителям) с логированием """
+
+    mail = mail_setting.mail
+
+    status = MailingLogger.STATUS.SUCCESS
+    error_msg = None
     try:
         send_mail(
-            subject=subject,
-            message=message,
-            from_email=from_email,
-            recipient_list=recipient_list,
+            subject=mail.title,
+            message=mail.message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[client],
         )
+    except smtplib.SMTPException as e:
+        error_msg = e
+        status = MailingLogger.STATUS.ERROR
     except Exception as e:
-        print(e)
+        error_msg = e
+        status = MailingLogger.STATUS.ERROR
+    finally:
+        log = MailingLogger.objects.create(
+            status=status,
+            error=error_msg,
+            setting=mail_setting,
+        )
+        log.save()

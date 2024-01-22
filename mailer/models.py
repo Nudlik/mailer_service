@@ -97,7 +97,14 @@ class MailingLogger(models.Model):
 
     date = models.DateTimeField(auto_now_add=True, verbose_name='Время попытки')
     status = models.CharField(max_length=7, choices=STATUS.choices, verbose_name='Статус попытки')
-    error = models.CharField(max_length=255, verbose_name='Ответ почтового сервера')
+    error = models.TextField(**NULLABLE, verbose_name='Ответ почтового сервера')
+    setting = models.ForeignKey(
+        to='MailingSettings',
+        **NULLABLE,
+        on_delete=models.SET_NULL,
+        verbose_name='Рассылка',
+        related_name='log',
+    )
 
     class Meta:
         verbose_name = 'Лог'

@@ -89,7 +89,7 @@ class SettingsListView(LoginRequiredMixin, MenuMixin, ListView):
     page_description = 'Здесь отображены все рассылки созданные вами'
 
     def get_queryset(self):
-        return self.model.objects.filter(owner=self.request.user)
+        return self.model.objects.filter(owner=self.request.user, is_active=True)
 
 
 class SettingsDetailView(LoginRequiredMixin, MenuMixin, DetailView):
@@ -103,7 +103,7 @@ class SettingsDetailView(LoginRequiredMixin, MenuMixin, DetailView):
         )
 
     def get_object(self, queryset=None):
-        return get_object_or_404(self.model, pk=self.kwargs['pk'], owner=self.request.user)
+        return get_object_or_404(self.model, pk=self.kwargs['pk'], owner=self.request.user, is_active=True)
 
 
 class SettingsCreateView(LoginRequiredMixin, MenuMixin, CreateView):

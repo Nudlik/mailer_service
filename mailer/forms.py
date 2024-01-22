@@ -16,6 +16,15 @@ class MessageForm(forms.ModelForm):
 
 
 class SettingsForm(forms.ModelForm):
+    STATUS_CHOICES = [
+        ('draft', 'черновик'),
+        ('created', 'создана'),
+    ]
+    status = forms.ChoiceField(
+        choices=STATUS_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Статус',
+    )
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
@@ -31,7 +40,6 @@ class SettingsForm(forms.ModelForm):
             'time_start': forms.SelectDateWidget(attrs={'class': 'form-control'}),
             'time_end': forms.SelectDateWidget(attrs={'class': 'form-control'}),
             'frequency': forms.Select(attrs={'class': 'form-control'}),
-            'status': forms.Select(attrs={'class': 'form-control'}),
             'mail': forms.Select(attrs={'class': 'form-control'}),
             'clients': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
