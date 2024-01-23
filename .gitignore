@@ -161,3 +161,6 @@ cython_debug/
 
 # фикстуры
 /users/fixtures/users_data.json
+
+# логи
+logs/

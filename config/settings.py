@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # Сторонние приложения
     'django_extensions',
     'debug_toolbar',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
@@ -135,7 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Krasnoyarsk'
 
 USE_I18N = True
 
@@ -184,3 +185,59 @@ LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'users:login'
 
 AUTH_USER_MODEL = 'users.User'
+
+# настройки планировщика задач
+# See https://docs.djangoproject.com/en/dev/ref/settings/#datetime-format формат даты
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+# https://djangopackages.org/grids/g/workers-queues-tasks/ ручной таймаут если запускать через админку
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # секунды
+
+# настройки логирования
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/debug.log',
+            'formatter': 'verbose',
+        },
+        'file_apscheduler': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/apscheduler_log.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+            'formatter': 'verbose',
+        },
+        'apscheduler': {
+            'handlers': ['file_apscheduler'],
+            'level': 'DEBUG',
+            'propagate': True,
+            'formatter': 'verbose',
+        },
+    },
+}
