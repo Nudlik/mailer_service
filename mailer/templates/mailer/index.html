@@ -6,22 +6,48 @@
         <div class="col-md-6">
             <div class="row row-cols-1 g-3">
                 <div class="col">
-                    <div class="card mx-2 p-0">
+                    <div class="card p-0">
                         <div class="card-header">
                             <b>Статистика рассылок сайта</b>
                         </div>
                         <div class="card-body">
-                            <p>Количество рассылок всего: {{ mailing.total_count }}</p>
-                            <p>Количество активных рассылок: {{ mailing.total_active }}</p>
-                            <p>Количество уникальных клиентов для рассылок: {{ mailing.total_client }}</p>
+                            <p>Количество рассылок всего: {{ total_count }}</p>
+                            <p>Количество активных рассылок: {{ total_active }}</p>
+                            <p>Количество уникальных клиентов для рассылок: {{ total_client }}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col">
-                    <div class="card h-100 mx-2 p-0">
+                    <div class="card p-0">
+                        <div class="card-header">
+                            <b>Как пользоваться сервисом</b>
+                        </div>
                         <div class="card-body">
-                            <a type="button" class="btn btn-lg btn-block btn-outline-warning container" href="{% url 'mailer:settings_list' %}">
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item">
+                                    <a href="{% url 'client:client_create' %}" class="link-warning">Добавить клиента</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="{% url 'mailer:message_create' %}" class="link-warning">Создать письмо</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="{% url 'mailer:settings_create' %}" class="link-warning">Создать рассылку
+                                    </a>(назначить дату, выбрать клиентов и письма)
+                                </li>
+                                <li class="list-group-item">
+                                    Время рассылки писем начинается по UTC +7 (каждый день в час ночи)
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 p-0">
+                        <div class="card-body">
+                            <a type="button" class="btn btn-lg btn-block btn-outline-warning container"
+                               href="{% url 'mailer:settings_list' %}">
                                 Перейти в рассылки
                             </a>
                         </div>

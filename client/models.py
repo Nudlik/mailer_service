@@ -23,6 +23,7 @@ class Client(models.Model):
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
+        ordering = ['id']
         permissions = [
             ('view_client_list', 'Может просматривать список клиентов')
         ]

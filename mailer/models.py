@@ -48,6 +48,7 @@ class MailingSettings(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+        ordering = ['id']
         permissions = [
             ('can_view_all_fields', 'Может просматривать всю админку'),
         ]
@@ -79,6 +80,7 @@ class MailingMessage(models.Model):
     )
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Письмо'
         verbose_name_plural = 'Письма'
 

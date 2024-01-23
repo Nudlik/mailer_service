@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView, ListView
@@ -18,11 +17,9 @@ class IndexTemplateView(MenuMixin, TemplateView):
     def get_context_data(self, **kwargs):
         return self.get_mixin_context(
             context=super().get_context_data(**kwargs),
-            mailing=MailingSettings.objects.aggregate(
-                total_count=Count('pk'),
-                total_active=Count('pk', filter=Q(status=MailingSettings.STATUS.ACTIVE)),
-                total_client=Count('clients', distinct=True),
-            ),
+            total_count=MailingSettings.objects.count(),
+            total_active=MailingSettings.objects.filter(status=MailingSettings.STATUS.ACTIVE).count(),
+            total_client=MailingSettings.objects.filter(clients__isnull=False).distinct().count(),
             random_post=Post.objects.order_by('?')[:3],
         )
 

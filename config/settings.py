@@ -241,3 +241,23 @@ LOGGING = {
         },
     },
 }
+
+# настройки кеша
+CACHES_ENABLED = env.bool('CACHES_ENABLED', False)
+if CACHES_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': env.str('REDIS_LOCATION'),
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
+
+CACHE_TIMEOUT: int = 60 * 5
+# кэш ключи для blog
+CACHE_POST_LIST: str = 'post_list'

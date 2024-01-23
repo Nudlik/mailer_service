@@ -2,7 +2,9 @@ from datetime import timedelta, date
 import smtplib
 
 from dateutil.relativedelta import relativedelta
+from django.core.cache import cache
 from django.core.mail import send_mail
+from django.db.models import QuerySet
 
 from config import settings
 from mailer.models import MailingSettings, MailingLogger
@@ -78,3 +80,15 @@ def send_mail_custom(mail_setting: MailingSettings, client: MailingSettings.clie
             setting=mail_setting,
         )
         log.save()
+
+
+def cache_for_queryset(key: str, queryset: QuerySet, time: int = settings.CACHE_TIMEOUT) -> QuerySet:
+    """ Кеширует queryset запрос к базе данных """
+
+    if not settings.CACHES_ENABLED:
+        return queryset
+    queryset_cache = cache.get(key)
+    if queryset_cache is not None:
+        return queryset_cache
+    cache.set(key, queryset, time)
+    return queryset
