@@ -3,15 +3,10 @@ from django.db import models
 from django.urls import reverse
 
 from client.models import Client
-
-NULLABLE = {
-    'blank': True,
-    'null': True,
-}
+from utils.const import NULLABLE
 
 
 class MailingSettings(models.Model):
-
     class FREQUENCY(models.TextChoices):
         DAILY = 'daily', 'ежедневно'
         WEEKLY = 'weekly', 'еженедельно'
@@ -66,51 +61,3 @@ class MailingSettings(models.Model):
     @property
     def get_frequency(self):
         return dict(self.FREQUENCY.choices).get(self.frequency)
-
-
-class MailingMessage(models.Model):
-    title = models.CharField(max_length=150, verbose_name='Тема письма')
-    message = models.TextField(verbose_name='Сообщение')
-    author = models.ForeignKey(
-        to=get_user_model(),
-        **NULLABLE,
-        on_delete=models.CASCADE,
-        related_name='message',
-        verbose_name='Автор'
-    )
-
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'Письмо'
-        verbose_name_plural = 'Письма'
-
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse('mailer:message_detail', kwargs={'pk': self.pk})
-
-
-class MailingLogger(models.Model):
-
-    class STATUS(models.TextChoices):
-        SUCCESS = 'success', 'успешно'
-        ERROR = 'error', 'ошибка'
-
-    date = models.DateTimeField(auto_now_add=True, verbose_name='Время попытки')
-    status = models.CharField(max_length=7, choices=STATUS.choices, verbose_name='Статус попытки')
-    error = models.TextField(**NULLABLE, verbose_name='Ответ почтового сервера')
-    setting = models.ForeignKey(
-        to='MailingSettings',
-        **NULLABLE,
-        on_delete=models.SET_NULL,
-        verbose_name='Рассылка',
-        related_name='log',
-    )
-
-    class Meta:
-        verbose_name = 'Лог'
-        verbose_name_plural = 'Логи'
-
-    def __str__(self):
-        return f'{self.date} {self.status}'
