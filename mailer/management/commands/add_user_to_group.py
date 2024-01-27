@@ -94,9 +94,9 @@ class Command(BaseCommand):
         else:
             print(f'Пользователь выбран:\npk: {user.pk} email: {user.email} username: {user.username}')
 
-    def get_group(self, groups: QuerySet, index: int) -> Group | ValueError:
+    def get_group(self, groups: QuerySet, index: int) -> Group | IndexError:
         """ Получаем группу по индексу """
 
         if index > len(groups) or index < 0:
-            raise ValueError('Не верный индекс группы')
+            raise IndexError('Не верный индекс группы')
         return groups[index]
