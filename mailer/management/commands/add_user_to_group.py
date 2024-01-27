@@ -67,7 +67,8 @@ class Command(BaseCommand):
                 print(f'Пользователь {user} добавлен в группу {group}')
                 break
 
-    def create_groups(self, groups: dict) -> None:
+    @staticmethod
+    def create_groups(groups: dict) -> None:
         """ Создаем группы и привязываем разрешениям к ним """
 
         for group_name, permissions in groups.items():
@@ -79,7 +80,8 @@ class Command(BaseCommand):
 
             group.save()
 
-    def get_user(self, user_id: int) -> get_user_model() | None:
+    @staticmethod
+    def get_user(user_id: int) -> QuerySet | None:
         """ Получаем пользователя по id """
 
         user_model = get_user_model()
@@ -88,7 +90,8 @@ class Command(BaseCommand):
         except user_model.DoesNotExist:
             return None
 
-    def print_user(self, user: get_user_model()) -> None:
+    @staticmethod
+    def print_user(user: QuerySet.first) -> None:
         """ Выводим информацию о пользователе """
 
         if user is None:
@@ -96,7 +99,8 @@ class Command(BaseCommand):
         else:
             print(f'Пользователь выбран:\npk: {user.pk} email: {user.email} username: {user.username}')
 
-    def get_group(self, groups: QuerySet, index: int) -> Group | IndexError:
+    @staticmethod
+    def get_group(groups: QuerySet, index: int) -> QuerySet | IndexError:
         """ Получаем группу по индексу """
 
         if index > len(groups) or index < 0:
