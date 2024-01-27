@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import reverse
-from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from mailer.models import MailingSettings, MailingMessage, MailingLogger
@@ -43,6 +42,8 @@ class MailingMessageAdmin(admin.ModelAdmin):
 
     @admin.display(description='Автор')
     def get_author(self, obj):
+        """ Делаем в лист-юзерах кликабельную ссылку для перехода на страницу юзера(для оперативной блокировки) """
+
         url = reverse('admin:users_user_change', args=[obj.author.id])
         return mark_safe(f'<a href="{url}">{obj.author}</a>')
 

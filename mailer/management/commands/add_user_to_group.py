@@ -88,7 +88,9 @@ class Command(BaseCommand):
         except user_model.DoesNotExist:
             return None
 
-    def print_user(self, user):
+    def print_user(self, user: get_user_model()) -> None:
+        """ Выводим информацию о пользователе """
+
         if user is None:
             print('Пользователь не найден')
         else:
